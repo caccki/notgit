@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>볼 애니메이션</title>
+  <script>
+    function *infinity() {
+      let i = -1;
+      while (true) yield ++i;
+    }
+
+    function *map(f, iter) {
+      for (const a of iter) yield f(a);
+    }
+
+    function *take(limit, iter) {
+      for (const a of iter) {
+        yield a;
+        if (!(--limit)) break;
+      }
+    }
+
+    function reduce(f, iter) {
+      iter = iter[Symbol.iterator]();
+      let acc = iter.next().value;
+      for (const a of iter) acc = f(acc, a)
+      return acc;
+    }
+
+    function randomVelocity(vmin, vmax) {
+      var v = vmin + Math.random() * (vmax - vmin);
+      var t = 2 * Math.PI * Math.random();
+      return { x: v * Math.cos(t), y: v * Math.sin(t) };
+    }
+
+    const randomRgb = (lmin, lmax) =>
+      `rgb(${
+        reduce(
+          (a, b) => `${a},${b}`,
+          take(3,
+            map(
+              () => Math.floor(lmin + Math.random() * (lmax - lmin)),
+              infinity())))})`;
+
+    window.onload = function () {
+      let canvas = document.getElementById('mycanvas');
+      let ctx = canvas.getContext('2d');
+
+      const wall = {
+        top: 0,
+        left: 0,
+        right: canvas.width,
+        bottom: canvas.height
+      };
+
+      let balls = [...take(200,
+        map(() => Ball.create(
+          wall.right / 2,
+          wall.bottom / 2,
+          5,
+          randomVelocity(1, 5),
+          randomRgb(10, 255)), infinity()))];
+
+      drawBalls();
+
+      function drawBalls() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        balls.forEach(ball => Ball.draw(ctx, Ball.move(ball, wall)));
+
+        requestAnimationFrame(drawBalls);
+      }
+    };
+
+    const Ball = {
+      create: (x, y, r, v, color) => ({ x, y, r, v, color }),
+
+      move(ball, wall) {
+        ball.x += ball.v.x;
+        ball.y += ball.v.y;
+        if (ball.x - ball.r < wall.left) {
+          ball.x = wall.left + ball.r;
+          if (ball.v.x < 0) ball.v.x *= -1;
+        }
+        if (ball.x + ball.r > wall.right) {
+          ball.x = wall.right - ball.r;
+          if (ball.v.x > 0) ball.v.x *= -1;
+        }
+        if (ball.y - ball.r < wall.top) {
+          ball.y = wall.top + ball.r;
+          if (ball.v.y < 0) ball.v.y *= -1;
+        }
+        if (ball.y + ball.r > wall.bottom) {
+          ball.y = wall.bottom - ball.r;
+          if (ball.v.y > 0) ball.v.y *= -1;
+        }
+        return ball;
+      },
+
+      draw(ctx, ball) {
+        ctx.fillStyle = ball.color;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI, true);
+        ctx.fill();
+      }
+    };
+  </script>
+</head>
+<body>
+<canvas id="mycanvas" width=840 height=880></canvas>
+</body>
+</html>

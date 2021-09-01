@@ -1,0 +1,9 @@
+
+
+
+
+/* 캔버스 */
+
+
+cross-origin data 이슈 : The canvas has been tainted by cross-origin data.
+- 원인: 보안을 위해 다른 도메인에서 제공되는 data를 오염된것으로 간주하여 오류를 발생시킴

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas 그림 읽어들이기</title>
+  <style>
+    canvas { border: 2px solid blue}
+  </style>
+  <script>
+    window.onload = function(){
+      var canvas = document.getElementById("mycanvas");
+      var ctx = canvas.getContext("2d")
+      var img = new Image();
+      img.onload = function(){
+        ctx.drawImage(img,15,15,50,50,50,50,100,100); // img,x,y,width,height // img,sx,sy,sw,sh,x,y,width,height
+      }
+      img.src = "https://upload.wikimedia.org/wikipedia/commons/6/67/NodeJS.png"
+    }
+    </script>
+
+</head>
+<body>
+  <canvas id="mycanvas" width="500" height="200"></canvas>
+
+</body>
+</html>
+
+
+

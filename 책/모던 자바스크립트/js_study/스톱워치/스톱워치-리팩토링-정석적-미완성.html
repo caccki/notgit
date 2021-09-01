@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>스톱워치</title>
+
+  <script>
+    window.onload=  function(){
+      const eventH = {
+        start: () => {
+          console.log('evnet H from start')
+          startSet = "start"
+
+          var timeSwitch = false;
+          var startTime = new Date();
+          if ( startSet != "start" ){
+            startSet = setInterval(() => {
+            var nowTime = new Date();
+            display1.innerHTML = ((nowTime-startTime)/1000).toFixed(2);
+            var timeSwitch = true;
+
+            }, 100);
+
+
+          }
+        },
+        stop:() => {
+          var timeSwitch = false
+
+          console.log('event H from stop')
+          clearInterval(startSet);
+          startSet = "stop"
+          console.log(startSet)
+        },
+
+      }
+      const Buttons = {}
+      const idsArr = ['start','stop','display1']
+      idsArr.map(item=>{
+        Buttons[item+'button'] = document.getElementById(item)
+        Buttons[item+'button'].onclick = eventH[item]
+      })
+
+    }
+  
+  </script>
+</head>
+<body>
+    <p id="display1">0.00</p>
+    <input type="button" id="start" value="start">
+    <input type="button" id="stop" value="stop">
+</body>
+</html>

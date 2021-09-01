@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>테스트</title>
+
+  <script>
+    window.onload=  function(){
+
+      var idsArr = ["test","test2"] 
+      idsArr.forEach( function(key,idx) {
+        window[key+"ID"]= document.getElementById(key);
+        window[key+"ID"].onclick = eval(key);
+        window[key+"VALUE"] = parseFloat(window[key+"ID"].value);
+        //console.log(window[key+"ID"])
+        //console.log(window[key+"ID"].value)
+        console.log(test2VALUE)
+      });
+    };
+    function button(){
+        // console.log(weightVALUE)
+        bmiID.innerHTML = (weightVALUE/heightVALUE/heightVALUE).toFixed(1);
+      }
+  </script>
+</head>
+<body>
+    <p>test: <input type="number" id="test" value="0" ></p>
+    <p>test2: <input type="text" id="test2" value="둘" ></p>
+
+
+</body>
+</html>
+
+

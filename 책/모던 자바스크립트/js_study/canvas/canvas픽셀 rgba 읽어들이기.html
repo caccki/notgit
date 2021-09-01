@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>픽셀의 RGBA값</title>
+  <style>
+    canvas { border: 2px solid blue}
+  </style>
+  <script>
+    window.onload = function(){
+      console.log("this")
+      var canvas = document.getElementById("mycanvas");
+      var ctx = canvas.getContext("2d")
+      var img = new Image();
+      img.onload = function(){
+        ctx.drawImage(img,0,0); // img,x,y//img,x,y,width,height // img,sx,sy,sw,sh,x,y,width,height
+        var imageData = ctx.getImageData(0,0,canvas.width,canvas.height)
+        imageData.getRGBA = function(m,n,i){
+          return this.data[this.width*4*n + 4*m+i];
+        }
+        var rgb = document.getElementById("rgb")
+        canvas.onclick = function(event){
+          var x = event.offsetX;
+          var y = event.offsetY;
+          rgb.innerHTML = "R:"+to3digit(imageData.getRGBA(x,y,0))
+                         + "G:"+to3digit(imageData.getRGBA(x,y,1))
+                         + "B:"+to3digit(imageData.getRGBA(x,y,2))
+        }
+      }
+      img.src = "https://upload.wikimedia.org/wikipedia/commons/5/53/Cat_anatomy_diagram_%28cs%29.svg"
+    };
+    function to3digit(n){
+      return("000"+n).slice(-3);
+    }
+    </script>
+
+</head>
+<body>
+  <canvas id="mycanvas" width="700" height="400"></canvas>
+  <div><output id="rgb"></output></div>
+</body>
+</html>
+
+
+
